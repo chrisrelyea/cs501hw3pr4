@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.nextButton.setOnClickListener {
             quizViewModel.moveToNext()
-            quizViewModel.isCheater = false
             updateQuestion()
         }
 

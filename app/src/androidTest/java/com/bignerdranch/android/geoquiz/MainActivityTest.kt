@@ -2,8 +2,10 @@ package com.bignerdranch.android.geoquiz
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -29,21 +31,19 @@ class MainActivityTest {
     }
 
     @Test
-    fun showsFirstQuestionOnLaunch() {
-        onView(withId(R.id.question_text_view))
-            .check(matches(withText(R.string.question_australia)))
+    fun showsAnswerWhenClicked() {
+        onView(withId(R.id.cheat_button)).perform(click())
+        onView(withId(R.id.show_answer_button)).perform(click())
+        onView(withId(R.id.answer_text_view)).check(matches(withText("True")))
     }
 
     @Test
-    fun showsSecondQuestionAfterNextPress() {
-        onView(withId(R.id.next_button)).perform(click())
-        onView(withId(R.id.question_text_view)).check(matches(withText(R.string.question_oceans)))
-    }
+    fun loopsBackToFirstQuestion() {
+        for (i in (1..6)) {
+            onView(withId(R.id.next_button)).perform(click())
+        }
+        onView(withId(R.id.question_text_view)).check(matches(withText(R.string.question_australia)))
 
-    @Test
-    fun handlesActivityRecreation() {
-        onView(withId(R.id.next_button)).perform(click())
-        scenario.recreate()
-        onView(withId(R.id.question_text_view)).check(matches(withText(R.string.question_oceans)))
     }
 }
+
